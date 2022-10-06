@@ -1,18 +1,19 @@
 // @ts-check
-const Card = require("../common/Card");
-const I18n = require("../common/I18n");
-const { langCardLocales } = require("../translations");
-const { createProgressNode } = require("../common/createProgressNode");
-const {
+import { Card } from "../common/Card.js";
+import { createProgressNode } from "../common/createProgressNode.js";
+import { I18n } from "../common/I18n.js";
+import {
+  chunkArray,
   clampValue,
-  getCardColors,
   flexLayout,
+  getCardColors,
   lowercaseTrim,
   measureText,
-  chunkArray,
-} = require("../common/utils");
+} from "../common/utils.js";
+import { langCardLocales } from "../translations.js";
 
 const DEFAULT_CARD_WIDTH = 300;
+const MIN_CARD_WIDTH = 230;
 const DEFAULT_LANGS_COUNT = 5;
 const DEFAULT_LANG_COLOR = "#858585";
 const CARD_PADDING = 25;
@@ -24,12 +25,12 @@ const CARD_PADDING = 25;
 /**
  * @param {Lang[]} arr
  */
- const getLongestLang = (arr) =>
- arr.reduce(
-   (savedLang, lang) =>
-     lang.name.length > savedLang.name.length ? lang : savedLang,
-   { name: "", size: null, color: "" },
- );
+const getLongestLang = (arr) =>
+  arr.reduce(
+    (savedLang, lang) =>
+      lang.name.length > savedLang.name.length ? lang : savedLang,
+    { name: "", size: null, color: "" },
+  );
 
 /**
  * @param {{
@@ -214,7 +215,7 @@ const useLanguages = (topLangs, hide, langs_count) => {
     });
   }
 
-  // filter out langauges to be hidden
+  // filter out languages to be hidden
   langs = langs
     .sort((a, b) => b.size - a.size)
     .filter((lang) => {
@@ -234,7 +235,7 @@ const useLanguages = (topLangs, hide, langs_count) => {
  */
 const renderTopLanguages = (topLangs, options = {}) => {
   const {
-    hide_title,
+    hide_title = false,
     hide_border,
     card_width,
     title_color,
@@ -261,7 +262,11 @@ const renderTopLanguages = (topLangs, options = {}) => {
     String(langs_count),
   );
 
-  let width = isNaN(card_width) ? DEFAULT_CARD_WIDTH : card_width;
+  let width = isNaN(card_width)
+    ? DEFAULT_CARD_WIDTH
+    : card_width < MIN_CARD_WIDTH
+    ? MIN_CARD_WIDTH
+    : card_width;
   let height = calculateNormalLayoutHeight(langs.length);
 
   let finalLayout = "";
@@ -306,4 +311,4 @@ const renderTopLanguages = (topLangs, options = {}) => {
   `);
 };
 
-module.exports = renderTopLanguages;
+export { renderTopLanguages, MIN_CARD_WIDTH };

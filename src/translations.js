@@ -1,4 +1,4 @@
-const { encodeHTML } = require("./common/utils");
+import { encodeHTML } from "./common/utils.js";
 
 const statCardLocales = ({ name, apostrophe }) => {
   const encodedName = encodeHTML(name);
@@ -201,7 +201,7 @@ const repoCardLocales = {
     cs: "Šablona",
     de: "Vorlage",
     en: "Template",
-    es: "Planitlla",
+    es: "Plantilla",
     fr: "Modèle",
     hu: "Sablon",
     it: "Template",
@@ -358,7 +358,7 @@ function isLocaleAvailable(locale) {
   return availableLocales.includes(locale.toLowerCase());
 }
 
-module.exports = {
+export {
   isLocaleAvailable,
   availableLocales,
   statCardLocales,
